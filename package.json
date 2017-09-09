@@ -1,29 +1,27 @@
 {
-  "name": "node-js-sample",
-  "version": "0.2.0",
-  "description": "A sample Node.js app using Express 4",
+  "name": "jar-web",
+  "version": "1.0.0",
+  "description": "Java Applet Replacement Web Application",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node --use_strict index.js"
   },
   "dependencies": {
-    "express": "^4.13.3"
+    "express": "^4.15.3"
   },
   "engines": {
-    "node": "4.0.0"
+    "node": "8.2.1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-sample"
+    "url": "https://github.com/XEonAX/jar-web"
   },
   "keywords": [
     "node",
     "heroku",
-    "express"
+    "express",
+    "websocket"
   ],
-  "author": "Mark Pundsack",
-  "contributors": [
-    "Zeke Sikelianos <zeke@sikelianos.com> (http://zeke.sikelianos.com)"
-  ],
+  "author": "Sumant Vanage",
   "license": "MIT"
 }
