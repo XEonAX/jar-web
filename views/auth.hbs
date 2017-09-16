@@ -11,7 +11,7 @@
 
 <body>
     <div class="mdl-layout mdl-js-layout mdl-color--grey-100">
-        <form action="/login" method="POST">
+        <form action="/auth" method="POST">
             <main class="mdl-layout__content">
                 <div class="mdl-card mdl-shadow--6dp">
                     <div class="mdl-card__title mdl-color--primary mdl-color-text--white">
@@ -28,12 +28,20 @@
                         </div>
                     </div>
                     <div class="mdl-card__actions mdl-card--border">
-                        <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Log in</button>
+                        <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" name="action" value="login">Log in</button>
+                        <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" name="action" value="signup">Sign up</button>
+                        {{#if message}}
+                        <div class="mdl-card__supporting-text">
+                            {{message}}
+                        </div>
+                        {{/if}}
                     </div>
+
                 </div>
             </main>
         </form>
     </div>
+
 </body>
 
 </html>

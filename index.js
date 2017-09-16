@@ -7,6 +7,8 @@ var port = env.PORT || 5000;
 var path = require('path');
 var localStrategy = require('passport-local').Strategy;
 
+var handlebars  = require('express-handlebars');
+
 var mongoose = require('mongoose');
 var dbconnstr = process.env.MONGODB_DB_URL ? process.env.MONGODB_DB_URL : 'mongodb://localhost/passport';
 mongoose.connect(dbconnstr, {
@@ -20,6 +22,9 @@ app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 //Register 'public' directory for static handler
 app.use(express.static(__dirname + '/public'));
+
+app.engine('.hbs', handlebars({extname: '.hbs'}));
+app.set('view engine', '.hbs');
 
 // Configuring Passport
 var passport = require('passport');
@@ -41,30 +46,9 @@ var initPassport = require('./passport/init');
 initPassport(passport);
 
 
+var routes = require('./routes')(passport);
+app.use('/', routes);
 
-
-
-app.get('/', function(request, response) {
-  response.send('Hello World!!');
-});
-
-app.get('/login.html', function(request, response) {
-  var options = {
-		root: path.join(__dirname, 'views'),
-		dotfiles: 'deny',
-		headers: {
-			'x-timestamp': Date.now(),
-			'x-sent': true
-		}
-	};
-	response.sendFile('login.html', options, function (err) {
-		if (err) {
-			next(err);
-		} else {
-			console.log('Sent:', 'login.htm');
-		}
-	});
-});
 
 //create http server
 var server = http.createServer(app);
