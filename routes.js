@@ -28,7 +28,26 @@ module.exports = function (passport) {
 	router.get('/home', isAuthenticated, function (req, res) {
 		res.render('home', {
 			User: req.user,
-			title: 'JAR-Web'
+			title: 'JAR-Web',
+			clientCheckboxes: [{
+				id: 'FWD',
+				text: 'Fetch Websocket Details'
+			}, {
+				id: 'CTS',
+				text: 'Connected to Server'
+			}, {
+				id: 'FLP',
+				text: 'Fetch Launch Parameters'
+			}, {
+				id: 'TTYL',
+				text: 'Try to Launch Client'
+			}, {
+				id: 'SWC',
+				text: 'Synchronize with Client'
+			}, {
+				id: 'R',
+				text: 'Ready'
+			}, ]
 		});
 	});
 	/* GET Login Page */

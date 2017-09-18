@@ -4,41 +4,20 @@
       <div class="mdl-card__supporting-text mdl-color-text--blue-grey-50">
         <h3>Client Status</h3>
         <ul class="demo-list-icon mdl-list">
+          {{#each clientCheckboxes}}
           <li class="mdl-list__item">
             <span class="mdl-list__item-primary-content mdl-color-text--blue-grey-50">
-<i id="chkclientCTS" class="material-icons mdl-list__item-icon chkclientstatus">check_box_outline_blank</i>
-Connected to Server
-</span>
+              <i id="chkclient{{this.id}}" class="material-icons mdl-list__item-icon chkclientstatus">check_box_outline_blank</i>{{this.text}}
+            </span>
           </li>
-          <li class="mdl-list__item">
-            <span class="mdl-list__item-primary-content mdl-color-text--blue-grey-50">
-<i id="chkclientFLP" class="material-icons mdl-list__item-icon chkclientstatus">check_box_outline_blank</i>
-Fetch Launch Parameters
-</span>
-          </li>
-          <li class="mdl-list__item">
-            <span class="mdl-list__item-primary-content mdl-color-text--blue-grey-50">
-<i id="chkclientTTLY" class="material-icons mdl-list__item-icon chkclientstatus">check_box_outline_blank</i>
-Try to Launch Client
-</span>
-          </li>
-          <li class="mdl-list__item">
-            <span class="mdl-list__item-primary-content mdl-color-text--blue-grey-50">
-<i id="chkclientSWC" class="material-icons mdl-list__item-icon chkclientstatus">check_box_outline_blank</i>
-Synchronize with Client
-</span>
-          </li>
-          <li class="mdl-list__item">
-            <span class="mdl-list__item-primary-content mdl-color-text--blue-grey-50">
-<i id="chkclientR" class="material-icons mdl-list__item-icon chkclientstatus">check_box_outline_blank</i>
-Ready
-</span>
-          </li>
+          {{/each}}
         </ul>
       </div>
       <div class="mdl-card__actions mdl-card--border">
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect  mdl-color-text--blue-grey-50" onclick="JAR_Client.Connect()">
           Start Connection</button>
+        <div class="mdl-layout-spacer"></div>
+        <a href="/releases/setup.exe" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--blue-grey-50">Download JAR - Client</a>
       </div>
     </div>
   </div>

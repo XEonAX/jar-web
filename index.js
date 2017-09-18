@@ -1,21 +1,21 @@
 var http = require('http');
 var express = require('express');
-var app = express();
 var websocketserver = require('ws').Server;
-var env = process.env;
-var port = env.PORT || 5000;
 var path = require('path');
 var localStrategy = require('passport-local').Strategy;
-
 var handlebars  = require('express-handlebars');
-
 var mongoose = require('mongoose');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+
+var env = process.env;
+var port = env.PORT || 3000;
+var app = express();
+
 var dbconnstr = process.env.MONGODB_DB_URL ? process.env.MONGODB_DB_URL : 'mongodb://localhost/passport';
 mongoose.connect(dbconnstr, {
   useMongoClient: true
 });
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
