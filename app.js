@@ -1,21 +1,13 @@
 var http = require('http');
 var express = require('express');
 var websocketserver = require('ws').Server;
-var path = require('path');
-var localStrategy = require('passport-local').Strategy;
-var handlebars  = require('express-handlebars');
-var mongoose = require('mongoose');
+var handlebars = require('express-handlebars');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
-var env = process.env;
-var port = env.PORT || 3000;
+var Constants = require('./constants.js');
 var app = express();
-
-var dbconnstr = process.env.MONGODB_DB_URL ? process.env.MONGODB_DB_URL : 'mongodb://localhost/passport';
-mongoose.connect(dbconnstr, {
-  useMongoClient: true
-});
+var db = require('./db.js');
+db.Init();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
@@ -23,15 +15,17 @@ app.use(cookieParser());
 //Register 'public' directory for static handler
 app.use(express.static(__dirname + '/public'));
 
-app.engine('.hbs', handlebars({extname: '.hbs'}));
-app.set('view engine', '.hbs');
+app.engine(Constants.HandlebarsExtn, handlebars({
+    extname: Constants.HandlebarsExtn
+}));
+app.set('view engine', Constants.HandlebarsExtn);
 
 // Configuring Passport
 var passport = require('passport');
 var expressSession = require('express-session');
 
 app.use(expressSession({
-  secret: 'jE9V0GbxEfGp0eax wc6E1xV5APwdAzt5 GqB63n8Bx8TwfLRr wAeQPVyAKWXLIqnM'
+    secret: Constants.SessionSecret
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -56,11 +50,10 @@ var server = http.createServer(app);
 
 //create websocket server on above http server
 var wss = new websocketserver({
-  server: server
+    server: server
 });
 
-console.log('http and ws server starting on port:' + port);
+console.log('http and ws server starting on port:' + Constants.Port);
 
 //Start the http and ws servers
-server.listen(port);
-
+server.listen(Constants.Port);
