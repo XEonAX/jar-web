@@ -32,11 +32,17 @@ module.exports = {
      * Primary Color from Material Palette.
      * @return {string}
      */  
-    PrimaryColor: 'indigo',
+    PrimaryColor: 'blue_grey',
     
     /**
      * Secondary Color from Material Palette.
      * @return {string}
-     */   
-    SecondaryColor: 'pink'
+     */
+    SecondaryColor: 'indigo',
+    
+    /**
+     * Page Title to use.
+     * @return {string}
+     */
+    Title: 'JAR - Web'
 };
