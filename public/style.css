@@ -218,4 +218,6 @@
 .pic {
   margin: 10px auto;
   filter: drop-shadow(3px 3px 1px #000);
+  height: 80px;
+  width: 70px;
 }
