@@ -11,7 +11,10 @@
     "rules": {
         "indent": [
             "error",
-            4
+            4,
+            {
+                "SwitchCase": 1
+            }
         ],
         "linebreak-style": [
             "error",
@@ -25,7 +28,7 @@
             "error",
             "always"
         ],
-        "no-console":"off",
+        "no-console": "off",
         "require-jsdoc": ["error", {
             "require": {
                 "FunctionDeclaration": true,

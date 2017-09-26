@@ -53,6 +53,9 @@ var wss = new websocketserver({
     server: server
 });
 
+var wsrouter = require('./wsrouter');
+routes.wsrouter = wsrouter(wss);
+
 console.log('http and ws server starting on port:' + Constants.Port);
 
 //Start the http and ws servers

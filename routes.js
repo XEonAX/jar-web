@@ -28,7 +28,7 @@ var isAuthenticated = function (req, res, next) {
  * @returns {Router}
  */
 module.exports = function (passport) {
-
+    router.wsrouter = null;
     /* Redirect to home if authenticated */
     router.get('/', isAuthenticated, function (req, res) {
         res.redirect('/home');
@@ -132,7 +132,7 @@ module.exports = function (passport) {
     router.get('/signout', function (req, res) {
         req.logout();
         res.redirect('/');
-
+        router.wsrouter.logout(req.sessionID);
     });
 
     return router;
