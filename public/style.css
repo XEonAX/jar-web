@@ -221,3 +221,10 @@
   height: 80px;
   width: 70px;
 }
+
+
+#identidiv {
+  width: 200px;
+  margin: 0 auto;
+  background-color: white;
+}

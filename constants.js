@@ -44,5 +44,9 @@ module.exports = {
      * Page Title to use.
      * @return {string}
      */
-    Title: 'JAR - Web'
+    Title: 'JAR - Web',
+/**
+ * 
+ */
+    Protocol:'jarclient:'
 };

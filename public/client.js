@@ -3,12 +3,12 @@
 var JAR_Client_ctor = function () {
     var self = this;
     self.chkclientstatuses = document.getElementsByClassName('chkclientstatus');
-    self.chkclientFWD = document.getElementById('chkclientFWD');
+    self.chkclientFCD = document.getElementById('chkclientFCD');
     self.chkclientCTS = document.getElementById('chkclientCTS');
-    self.chkclientFLP = document.getElementById('chkclientFLP');
-    self.chkclientTTLY = document.getElementById('chkclientTTLY');
+    self.chkclientTTLC = document.getElementById('chkclientTTLC');
     self.chkclientSWC = document.getElementById('chkclientSWC');
-    self.chkclientR = document.getElementById('chkclientR');
+    self.ClientLauncher = document.getElementById('ClientLauncher');
+    self.identidiv = document.getElementById('identidiv');
     self.uncheckallstatuses = function () {
         for (var index = 0; index < self.chkclientstatuses.length; index++) {
             var element = self.chkclientstatuses[index];
@@ -24,22 +24,37 @@ var JAR_Client_ctor = function () {
     self.SetYes = function (itag) {
         itag.innerText = 'check_box';
     };
+    self.IsYes = function (itag) {
+        return itag.innerText == 'check_box';
+    };
     self.Reset = function () {
         self.uncheckallstatuses();
     };
     self.ws = null;
+    self.LaunchClient = function () {
+        var protoUrl = self.jresp.protocol + '//' + ('https:' == document.location.protocol ? 'wss:' : 'ws:') + '//' + document.location.host + '/' + self.jresp.ctoken;
+
+        try {
+            self.SetMaybe(self.chkclientTTLC);
+            self.ClientLauncher.contentWindow.location.href = protoUrl;
+            self.SetYes(self.chkclientTTLC);
+        } catch (error) {
+
+        }
+    };
     self.Connect = function () {
         self.Reset();
         self.xhr = new XMLHttpRequest();
-        self.xhr.open('GET', 'api', true);
-        self.SetMaybe(self.chkclientFWD);
+        self.xhr.open('GET', 'api/' + encodeURIComponent(('https:' == document.location.protocol ? 'wss:' : 'ws:') + '//' + document.location.host + '/'), true);
+        self.SetMaybe(self.chkclientFCD);
         self.xhr.responseType = 'json';
         self.xhr.onload = function (sender, ev) {
             if (self.xhr.status == 200) {
-                self.SetYes(self.chkclientFWD);
-                var jresp = self.xhr.response;
-
-                var wsurl = ('https:' == document.location.protocol ? 'wss:' : 'ws:') + '//' + document.location.host + '/ws/?room=' + jresp.room;
+                self.SetYes(self.chkclientFCD);
+                self.jresp = self.xhr.response;
+                // self.identidiv.style.background = "url('data:image/svg+xml;base64," + self.jresp.identicon + "') center/cover";
+                self.identidiv.innerHTML = self.jresp.identicon;
+                var wsurl = ('https:' == document.location.protocol ? 'wss:' : 'ws:') + '//' + document.location.host + '/ws/?room=' + self.jresp.room;
                 if (typeof (self.ws) == 'object' && self.ws != null)
                     self.ws.close();
                 self.ws = new WebSocket(wsurl);
@@ -57,10 +72,11 @@ var JAR_Client_ctor = function () {
         self.SetYes(self.chkclientCTS);
         self.ws.send(JSON.stringify({
             action: 'query',
-            query:'clientconnected'
+            query: 'clientconnected'
         }));
     };
     self.wsmessage = function wsopen(ev) {
+        console.log(ev.data);
         var jmsg = JSON.parse(ev.data);
         switch (jmsg.action) {
         case 'notice':
@@ -68,21 +84,30 @@ var JAR_Client_ctor = function () {
             case 'clientconnected':
                 self.SetYes(self.chkclientSWC);
                 break;
-
+            case 'clientnotconnected':
+                if (!self.IsYes(self.chkclientTTLC))
+                    self.LaunchClient();
+                break;
+            case 'clientdisconnected':
+                self.SetNo(self.chkclientSWC);
+                break;
             default:
                 break;
             }
             break;
-
+        case 'performancetick':
+            break;
         default:
             break;
         }
     };
     self.wsclose = function wsopen(ev) {
         self.SetNo(self.chkclientCTS);
+        self.SetNo(self.chkclientSWC);
     };
     self.wserror = function wsopen(ev) {
-
+        self.SetNo(self.chkclientCTS);
+        self.SetNo(self.chkclientSWC);
     };
 };
 

@@ -113,6 +113,11 @@ module.exports = function (wss) {
                                                     }));
                                                 }
                                             }, this);
+                                        } else {
+                                            ws.send(JSON.stringify({
+                                                action: 'notice',
+                                                notice: 'clientnotconnected'
+                                            }));
                                         }
                                     }
                                 });

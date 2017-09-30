@@ -1,8 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var Constants = require('./constants.js');
-var Room = require('./models/room.js');
+var Constants = require('./constants');
+var Room = require('./models/room');
 var crypto = require('crypto');
+var jdenticon = require('./node_modules/jdenticon/dist/jdenticon');
+
 /**
  * Redirects the user to login page if not logged in, or calls the next request handler.
  * 
@@ -47,24 +49,18 @@ module.exports = function (passport) {
             User: req.user, //User Details
             title: Constants.Title,
             clientCheckboxes: [{ //Checkboxes to show on client page
-                id: 'FWD',
-                text: 'Fetch Websocket Details'
+                id: 'FCD',
+                text: 'Fetch Connection Details'
             }, {
                 id: 'CTS',
                 text: 'Connected to Server'
             }, {
-                id: 'FLP',
-                text: 'Fetch Launch Parameters'
-            }, {
-                id: 'TTYL',
+                id: 'TTLC',
                 text: 'Try to Launch Client'
             }, {
                 id: 'SWC',
                 text: 'Synchronize with Client'
-            }, {
-                id: 'R',
-                text: 'Ready'
-            }, ],
+            }],
             primaryColor: Constants.PrimaryColor,
             secondaryColor: Constants.SecondaryColor
         });
@@ -82,8 +78,9 @@ module.exports = function (passport) {
 
 
     /* GET RoomDetails */
-    router.get('/api', isAuthenticated, function (req, res) {
+    router.get('/api/:clientsideurl', isAuthenticated, function (req, res) {
         console.log('ROUTER:rendering api JSON');
+        console.log('ROUTER::clientsideurl=' + req.params.clientsideurl);
         Room.findOne({
             sessionid: req.sessionID
         }, function (err, room) {
@@ -97,6 +94,9 @@ module.exports = function (passport) {
                 res.json({
                     ctoken: room.ctoken,
                     room: room.sessionid,
+                    protocol: Constants.Protocol,
+                    Port: Constants.Port,
+                    identicon: jdenticon.toSvg(req.params.clientsideurl + room.ctoken, 200, 0.1)
                 });
                 console.log('ROUTER:rendered ctoken and sessionid to json');
             } else {
@@ -121,6 +121,10 @@ module.exports = function (passport) {
                     res.json({
                         ctoken: room.ctoken,
                         room: room.sessionid,
+                        protocol: Constants.Protocol,
+                        Port: Constants.Port,
+                        // identicon:Buffer.from(jdenticon.toSvg(req.params.clientsideurl,200,0.1)).toString('base64')
+                        identicon: jdenticon.toSvg(req.params.clientsideurl + room.ctoken, 200, 0.1)
                     });
                     console.log('ROUTER:rendered ctoken and sessionid to json');
                 });
