@@ -228,3 +228,11 @@
   margin: 0 auto;
   background-color: white;
 }
+
+#ConnectedSections {
+  display: none;
+}
+
+#identiCard {
+  display: none;
+}

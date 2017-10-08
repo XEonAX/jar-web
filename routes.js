@@ -91,6 +91,7 @@ module.exports = function (passport) {
                     maxAge: 1000 * 60 * 10
                 });
                 console.log('ROUTER:btoken set to cookie');
+                console.log('Router:Ident for:' + req.params.clientsideurl + room.ctoken + '::' + jdenticon.toSvg(req.params.clientsideurl + room.ctoken, 200, 0.1));
                 res.json({
                     ctoken: room.ctoken,
                     room: room.sessionid,

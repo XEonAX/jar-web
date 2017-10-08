@@ -1,17 +1,19 @@
 <div class="demo-drawer mdl-layout__drawer mdl-color--grey-900 mdl-color-text--blue-grey-50">
-<header class="demo-drawer-header ">
-   {{!--  <i class="material-icons md-72 demo-avatar">person</i> --}}
-    <img src="/jarweb.png" class="pic">
-    <div class="demo-avatar-dropdown">
+    <header class="demo-drawer-header ">
+        <img src="/jarweb.png" class="pic">
+        <div class="demo-avatar-dropdown">
+            <div class="mdl-layout-spacer"></div>
+            <span>Welcome {{User.username}}</span>
+            <div class="mdl-layout-spacer"></div>
+        </div>
+    </header>
+    <nav class="demo-navigation mdl-navigation">
+        <a class="mdl-navigation__link cursored mdl-color-text--blue-grey-50" data-sectionname="d_client" onclick="Show(this);"><i class="material-icons" role="presentation">get_app</i>Client Status</a>
+        <div id="ConnectedSections">
+            <a class="mdl-navigation__link cursored mdl-color-text--blue-grey-50" data-sectionname="d_ticker" onclick="Show(this);"><i class="material-icons" role="presentation">graphic_eq</i>Performance Status</a>
+        </div>
         <div class="mdl-layout-spacer"></div>
-        <span>Welcome {{User.username}}</span>
-        <div class="mdl-layout-spacer"></div>
-    </div>
-</header>
-<nav class="demo-navigation mdl-navigation {{!-- mdl-color--blue-grey-800 --}}">
-    <a class="mdl-navigation__link cursored mdl-color-text--blue-grey-50{{!-- mdl-color-text--accent mdl-color--primary --}}" data-sectionname="d_client" onclick="Show(this);"><i class="{{!-- mdl-color-text--blue-grey-400 --}} material-icons" role="presentation">get_app</i>Client Status</a>
-    <div class="mdl-layout-spacer"></div>
-    <a class="mdl-navigation__link cursored mdl-color-text--blue-grey-100" href="https://github.com/XEonAX/jar-web" target="_blank"
+        <a class="mdl-navigation__link cursored mdl-color-text--blue-grey-100" href="https://github.com/XEonAX/jar-web" target="_blank"
             title="Made with 💙, Hosted on Heroku"><i class="material-icons" role="presentation">code</i>Code on Github</a>
-</nav>
+    </nav>
 </div>

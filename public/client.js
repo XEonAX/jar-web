@@ -9,6 +9,8 @@ var JAR_Client_ctor = function () {
     self.chkclientSWC = document.getElementById('chkclientSWC');
     self.ClientLauncher = document.getElementById('ClientLauncher');
     self.identidiv = document.getElementById('identidiv');
+    self.identiCard = document.getElementById('identiCard');
+    self.ConnectedSections = document.getElementById('ConnectedSections');
     self.uncheckallstatuses = function () {
         for (var index = 0; index < self.chkclientstatuses.length; index++) {
             var element = self.chkclientstatuses[index];
@@ -54,6 +56,7 @@ var JAR_Client_ctor = function () {
                 self.jresp = self.xhr.response;
                 // self.identidiv.style.background = "url('data:image/svg+xml;base64," + self.jresp.identicon + "') center/cover";
                 self.identidiv.innerHTML = self.jresp.identicon;
+                self.identiCard.style.display = 'inline';
                 var wsurl = ('https:' == document.location.protocol ? 'wss:' : 'ws:') + '//' + document.location.host + '/ws/?room=' + self.jresp.room;
                 if (typeof (self.ws) == 'object' && self.ws != null)
                     self.ws.close();
@@ -83,6 +86,7 @@ var JAR_Client_ctor = function () {
             switch (jmsg.notice) {
             case 'clientconnected':
                 self.SetYes(self.chkclientSWC);
+                self.ConnectedSections.style.display = 'inline';
                 break;
             case 'clientnotconnected':
                 if (!self.IsYes(self.chkclientTTLC))
@@ -96,6 +100,8 @@ var JAR_Client_ctor = function () {
             }
             break;
         case 'performancetick':
+            if (AddTick)
+                AddTick(jmsg);
             break;
         default:
             break;

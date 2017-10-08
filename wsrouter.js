@@ -84,6 +84,7 @@ module.exports = function (wss) {
                                     notice: 'subscribed',
                                     browsercount: room.browserConnections.length,
                                     sessionid: room.sessionid,
+                                    ctoken: jmsg.ctoken,
                                 }));
                             } else {
 
@@ -128,26 +129,60 @@ module.exports = function (wss) {
                             break;
                     }
                     break;
+                case 'performancetick':
+                    // console.log('WSM:Message:performancetick:' + JSON.stringify(jmsg));
+                    var wssclients = [...wss.clients];
+                    Room.find({
+                        ctoken: {
+                            $in: jmsg.ctokens
+                        }
+                    }, function (err, rooms) {
+                        if (rooms != null && rooms.length > 0) {
+                            for (var r = 0; r < rooms.length; r++) {
+                                var room = rooms[r];
+                                // console.log('WSM:Message:performancetick:Client:Room Found:' + room.toString());
+                                for (var i = 0; i < room.browserConnections.length; i++) {
+                                    var BrowserConnection = room.browserConnections[i];
+                                    for (var j = 0; j < wssclients.length; j++) {
+                                        var wsconn = wssclients[j];
+                                        if (wsconn.id == BrowserConnection) {
+                                            wsconn.send(JSON.stringify({
+                                                action: 'performancetick',
+                                                CPUTotal: jmsg.CPUTotal,
+                                                MemoryAvailable: jmsg.MemoryAvailable,
+                                                AverageCores: jmsg.AverageCores,
+                                                Cores: jmsg.Cores
+                                            }));
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+
+                    });
+                    break;
                 default:
                     break;
             }
         });
-
-        ws.on('close', function (ev) {
+        wss.wsclosehandler = function (ev) {
             console.log('WSM:Close:source:' + ws.source);
             if (ws.source == 'browser') {
                 Room.findOne({
                     browserConnections: ws.id
                 }, function (err, room) {
                     if (room != null) {
-                        console.log('WSM:Close:Room Found:' + room.toString());
+                        console.log('WSM:Close:Browser:Room Found:' + room.toString());
                         room.browserConnections.splice(room.browserConnections.indexOf(ws.id));
                         if (room.clientConnection != undefined) {
                             wss.clients.forEach(function (wsconn) {
                                 if (room.clientConnection === wsconn.id) {
                                     wsconn.send(JSON.stringify({
                                         action: 'notice',
-                                        notice: 'browserdisconnected'
+                                        notice: 'browserdisconnected',
+                                        ctoken: room.ctoken,
                                     }));
                                 }
                             }, this);
@@ -161,28 +196,31 @@ module.exports = function (wss) {
                     clientConnection: ws.id
                 }, function (err, room) {
                     if (room != null) {
-                        console.log('WSM:Close:Room Found:' + room.toString());
-                        room.browserConnections.splice(room.browserConnections.indexOf(ws.id));
-                        if (room.browserConnections.length == 0) {
-                            if (room.clientConnection != undefined) {
-                                wss.clients.forEach(function (wsconn) {
-                                    if (room.clientConnection == wsconn.id) {
-                                        wsconn.send(JSON.stringify({
-                                            action: 'notice',
-                                            notice: 'browserdisconnected'
-                                        }));
-                                    }
-                                }, this);
-                                room.clientConnection = undefined;
-                                room.save();
+                        console.log('WSM:Close:Client:Room Found:' + room.toString());
+                        for (var i = 0; i < room.browserConnections.length; i++) {
+                            var BrowserConnection = room.browserConnections[i];
+                            var wssclients = [...wss.clients];
+                            for (var j = 0; j < wssclients.length; j++) {
+                                var wsconn = wssclients[j];
+                                if (wsconn.id == BrowserConnection) {
+                                    wsconn.send(JSON.stringify({
+                                        action: 'notice',
+                                        notice: 'clientdisconnected'
+                                    }));
+                                    break;
+                                }
                             }
+                            room.clientConnection = undefined;
+                            room.save();
                         }
                         room.save();
                         console.log('WSM:Close:Room updated:' + room.toString());
                     }
                 });
             }
-        });
+        };
+        ws.on('close', wss.wsclosehandler);
+        ws.on('error', wss.wsclosehandler);
     });
     wss.logout = function (sessionid) {
         Room.findOne({
@@ -195,8 +233,8 @@ module.exports = function (wss) {
                         if (room.clientConnection == wsconn.id) {
                             wsconn.send(JSON.stringify({
                                 action: 'notice',
-                                notice: 'sessionlogout',
-                                sessionid: room.sessionid
+                                notice: 'logout',
+                                ctoken: room.ctoken
                             }));
                             room.clientConnection = undefined;
                             room.save();
