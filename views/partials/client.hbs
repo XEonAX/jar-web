@@ -15,7 +15,14 @@
       </div>
       <div class="mdl-card__actions mdl-card--border">
         <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect  mdl-color-text--blue-grey-50" onclick="JAR_Client.Connect()">
-          Start Connection</button>
+          Start Connection
+        </button>
+        <button id="btnClippy" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect  mdl-color-text--blue-grey-50">
+          <i class="material-icons">content_copy</i>Alternate Start
+        </button>
+        <div class="mdl-tooltip" data-mdl-for="btnClippy">
+          Uses clipboard. Ensure JAR-Client is running.
+        </div>
         <div class="mdl-layout-spacer"></div>
         <a href="/releases/setup.exe" target="_blank" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color-text--blue-grey-50">Download JAR - Client</a>
       </div>

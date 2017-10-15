@@ -34,11 +34,11 @@ var JAR_Client_ctor = function () {
     };
     self.ws = null;
     self.LaunchClient = function () {
-        var protoUrl = self.jresp.protocol + '//' + ('https:' == document.location.protocol ? 'wss:' : 'ws:') + '//' + document.location.host + '/' + self.jresp.ctoken;
+        self.protoUrl = self.jresp.protocol + '//' + ('https:' == document.location.protocol ? 'wss:' : 'ws:') + '//' + document.location.host + '/' + self.jresp.ctoken;
 
         try {
             self.SetMaybe(self.chkclientTTLC);
-            self.ClientLauncher.contentWindow.location.href = protoUrl;
+            self.ClientLauncher.contentWindow.location.href = self.protoUrl;
             self.SetYes(self.chkclientTTLC);
         } catch (error) {
 
@@ -115,6 +115,12 @@ var JAR_Client_ctor = function () {
         self.SetNo(self.chkclientCTS);
         self.SetNo(self.chkclientSWC);
     };
+
+    var x = new Clipboard('#btnClippy', {
+        text: function (trigger) {
+            return self.protoUrl; //.replace(self.jresp.protocol,self.jresp.xproto);
+        }
+    });
 };
 
 var JAR_Client = new JAR_Client_ctor();
