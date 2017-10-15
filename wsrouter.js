@@ -40,7 +40,8 @@ module.exports = function (wss) {
                                 wsconn.send(JSON.stringify({
                                     action: 'notice',
                                     notice: 'browserconnected',
-                                    browsercount: room.browserConnections.length
+                                    browsercount: room.browserConnections.length,
+                                    ctoken: room.ctoken
                                 }));
                             }
                         }, this);
@@ -149,9 +150,9 @@ module.exports = function (wss) {
                                             wsconn.send(JSON.stringify({
                                                 action: 'performancetick',
                                                 CPUTotal: jmsg.CPUTotal,
-                                                MemoryAvailable: jmsg.MemoryAvailable,
-                                                AverageCores: jmsg.AverageCores,
-                                                Cores: jmsg.Cores
+                                                MemoryUsed: jmsg.MemoryUsed
+                                                // AverageCores: jmsg.AverageCores,
+                                                // Cores: jmsg.Cores
                                             }));
                                             break;
                                         }
@@ -213,6 +214,7 @@ module.exports = function (wss) {
                             room.clientConnection = undefined;
                             room.save();
                         }
+                        room.ctoken=crypto.randomBytes(16).toString('hex');
                         room.save();
                         console.log('WSM:Close:Room updated:' + room.toString());
                     }

@@ -22,15 +22,17 @@ var chart = new Chart(ctx, {
             cubicInterpolationMode: 'default',
             data: [],
             pointRadius: 0
-        }, {
-            label: 'Average of all cores',
-            backgroundColor: Color(chartColors.green).alpha(0.3).rgbString(),
-            borderColor: chartColors.green,
-            fill: true,
-            cubicInterpolationMode: 'default',
-            data: [],
-            pointRadius: 0
-        }, {
+        }, 
+        // {
+        //     label: 'Average of all cores',
+        //     backgroundColor: Color(chartColors.green).alpha(0.3).rgbString(),
+        //     borderColor: chartColors.green,
+        //     fill: true,
+        //     cubicInterpolationMode: 'default',
+        //     data: [],
+        //     pointRadius: 0
+        // }, 
+        {
             label: 'Memory Usage',
             backgroundColor: Color(chartColors.blue).alpha(0.3).rgbString(),
             borderColor: chartColors.blue,
@@ -92,12 +94,12 @@ function AddTick(perfoTick) {
         x: moment(),
         y: perfoTick.CPUTotal
     });
+    // chart.data.datasets[1].data.push({
+    //     x: moment(),
+    //     y: perfoTick.AverageCores
+    // });
     chart.data.datasets[1].data.push({
         x: moment(),
-        y: perfoTick.AverageCores
-    });
-    chart.data.datasets[2].data.push({
-        x: moment(),
-        y: perfoTick.MemoryAvailable
+        y: perfoTick.MemoryUsed
     });
 }
