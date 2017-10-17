@@ -138,6 +138,9 @@ module.exports = function (passport) {
         req.logout();
         req.session.destroy();
         router.wsrouter.logout(req.sessionID);
+        res.clearCookie('btoken',{
+            path: '/ws/'
+        })
         res.redirect('/');
     });
 
