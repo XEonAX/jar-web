@@ -91,13 +91,13 @@ module.exports = function (passport) {
                     maxAge: 1000 * 60 * 10
                 });
                 console.log('ROUTER:btoken set to cookie');
-                console.log('Router:Ident for:' + req.params.clientsideurl + room.ctoken + '::' + jdenticon.toSvg(req.params.clientsideurl + room.ctoken, 200, 0.1));
+                console.log('Router:Ident for:' + req.params.clientsideurl + room.ctoken + '::' + jdenticon.toSvg(req.params.clientsideurl + room.ctoken + Constants.PreSharedSecret, 200, 0.1));
                 res.json({
                     ctoken: room.ctoken,
                     room: room.sessionid,
                     protocol: Constants.Protocol,
                     Port: Constants.Port,
-                    identicon: jdenticon.toSvg(req.params.clientsideurl + room.ctoken, 200, 0)
+                    identicon: jdenticon.toSvg(req.params.clientsideurl + room.ctoken + Constants.PreSharedSecret, 200, 0)
                 });
                 console.log('ROUTER:rendered ctoken and sessionid to json');
             } else {
@@ -125,7 +125,7 @@ module.exports = function (passport) {
                         protocol: Constants.Protocol,
                         Port: Constants.Port,
                         // identicon:Buffer.from(jdenticon.toSvg(req.params.clientsideurl,200,0.1)).toString('base64')
-                        identicon: jdenticon.toSvg(req.params.clientsideurl + room.ctoken, 200, 0)
+                        identicon: jdenticon.toSvg(req.params.clientsideurl + room.ctoken + Constants.PreSharedSecret, 200, 0)
                     });
                     console.log('ROUTER:rendered ctoken and sessionid to json');
                 });
@@ -138,7 +138,7 @@ module.exports = function (passport) {
         req.logout();
         req.session.destroy();
         router.wsrouter.logout(req.sessionID);
-        res.clearCookie('btoken',{
+        res.clearCookie('btoken', {
             path: '/ws/'
         })
         res.redirect('/');

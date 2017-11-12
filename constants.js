@@ -8,14 +8,14 @@ module.exports = {
      * @return {string}
      */
     HandlebarsExtn: '.hbs',
-    
+
     /**
      * Connection String for Mongoose. Uses environment variable `MONGODB_DB_URL` if defined
      * @return {string}
      */
-    ConnectionString : env.MONGODB_DB_URL || 'mongodb://localhost/passport',
+    ConnectionString: env.MONGODB_DB_URL || 'mongodb://localhost/passport',
 
-    
+
     /**
      * Port to listen on.  Uses environment variable `PORT` if defined
      * @return {number}
@@ -25,28 +25,33 @@ module.exports = {
     /**
      * Session Secret for Express Sessions.
      * @return {string}
-     */  
+     */
     SessionSecret: 'jE9V0GbxEfGp0eax wc6E1xV5APwdAzt5 GqB63n8Bx8TwfLRr wAeQPVyAKWXLIqnM',
-    
+
     /**
      * Primary Color from Material Palette.
      * @return {string}
-     */  
+     */
     PrimaryColor: 'blue_grey',
-    
+
     /**
      * Secondary Color from Material Palette.
      * @return {string}
      */
     SecondaryColor: 'indigo',
-    
+
     /**
      * Page Title to use.
      * @return {string}
      */
     Title: 'JAR - Web',
-/**
- * 
- */
-    Protocol:'jarclient:'
+    /**
+     * 
+     */
+    Protocol: 'jarclient:',
+    
+    /**
+     * Pre-Shared secret to create Identicon
+     */
+    PreSharedSecret: '🔒🔑'
 };

@@ -10,7 +10,9 @@ var db = require('./db.js');
 db.Init();
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(cookieParser());
 //Register 'public' directory for static handler
 app.use(express.static(__dirname + '/public'));
@@ -25,7 +27,9 @@ var passport = require('passport');
 var expressSession = require('express-session');
 
 app.use(expressSession({
-    secret: Constants.SessionSecret
+    secret: Constants.SessionSecret,
+    resave: false,
+    saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
